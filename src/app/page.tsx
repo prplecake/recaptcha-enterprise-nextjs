@@ -1,23 +1,45 @@
-import { RecaptchaWrapper } from "@/components/recaptcha-wrapper";
+"use client"; 
 
-export default function Home() {
+import { GoogleReCaptchaProvider,
+    useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { useCallback, useEffect } from "react";
 
-    async function onSubmit(formData: FormData) {
-        "use server";
-        const rawFormData = Object.fromEntries(formData);
-        console.log("Form Data:", rawFormData);
-        // Here you can send the token to your server for verification
-    }
+function HomeContent() {
+    const { executeRecaptcha } = useGoogleReCaptcha();
+
+    const handleRecaptchaVerify = useCallback(async () => {
+        if (!executeRecaptcha) {
+            console.error("Recaptcha not initialized");
+            return;
+        }
+
+        const token = await executeRecaptcha("homepage");
+        console.log("Recaptcha Token:", token);
+    }, [executeRecaptcha]);
+
+    useEffect(() => {
+        if (executeRecaptcha) {
+            handleRecaptchaVerify();
+        }
+    }, [executeRecaptcha, handleRecaptchaVerify]);
 
   return (
     <div>
       <h1>Welcome to the Recaptcha Example</h1>
       <p>This page demonstrates the use of Google Recaptcha.</p>
-      <form action={onSubmit}>
-      <RecaptchaWrapper action="homepage" />
-        <button type="submit"
+        <button onClick={handleRecaptchaVerify}
         >Submit</button>
-      </form>
     </div>
   );
+}
+
+export default function Home() {
+  return (
+    <GoogleReCaptchaProvider
+      reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+      useEnterprise={true}
+      >
+        <HomeContent />
+      </GoogleReCaptchaProvider>
+  )
 }
