@@ -1,22 +1,25 @@
-import { RecaptchaWrapper } from "@/components/recaptcha-wrapper";
+"use client";
+import {RECAPTCHA_SITE_KEY, Recaptcha} from "@/components/recaptcha";
 
 export default function Home() {
 
-    async function onSubmit(formData: FormData) {
-        "use server";
-        const rawFormData = Object.fromEntries(formData);
-        console.log("Form Data:", rawFormData);
-        // Here you can send the token to your server for verification
-    }
+  function onSubmit(token: string) {
+    console.log("Recaptcha token received:", token);
+  }
 
   return (
     <div>
       <h1>Welcome to the Recaptcha Example</h1>
       <p>This page demonstrates the use of Google Recaptcha.</p>
-      <form action={onSubmit}>
-      <RecaptchaWrapper action="homepage" />
-        <button type="submit"
-        >Submit</button>
+      <form id="test-form">
+        <Recaptcha onToken={onSubmit}/>
+        <button
+          className="g-recaptcha"
+          data-action="test_page"
+          data-callback="recaptchaPolicyCallback"
+          data-sitekey={RECAPTCHA_SITE_KEY}
+        >Submit
+        </button>
       </form>
     </div>
   );
