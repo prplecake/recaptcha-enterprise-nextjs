@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Page</title>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LcfA6crAAAAAIQgLldJzyQfDVHbllViCD7AF26H"/></script>
+    <script>
+      function onSubmit(token) {
+        console.log("Recaptcha token:", token);
+        document.getElementById("test-form").submit();
+        }
+    </script>
+  </head>
+
+  <body>
+    <h1>Test Page</h1>
+    <p>This is a test page to check the loading of external resources.</p>
+    <form id="test-form" method="POST">
+      <input type="text" name="test-input" placeholder="Type something..." />
+    <button
+      class="g-recaptcha"
+      data-sitekey="6LcfA6crAAAAAIQgLldJzyQfDVHbllViCD7AF26H"
+      data-callback="onSubmit"
+      data-action="test_page"
+      type="submit"
+    >Click Me</button>
+    </form>
+  </body>
+</html>
